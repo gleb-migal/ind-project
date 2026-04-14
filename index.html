@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoSelect - Подбор идеального автомобиля</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00d9ff;
+            --secondary-color: #ff3366;
+            --dark-bg: #0a0e1a;
+            --card-bg: #141824;
+            --accent-gradient: linear-gradient(135deg, #00d9ff 0%, #ff3366 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #a8b3cf;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 51, 102, 0.08) 0%, transparent 50%);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 217, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.8)); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 3rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            text-align: center;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: var(--accent-gradient);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.5);
+        }
+
+        .features {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            font-weight: 700;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 3rem 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 217, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .stats {
+            background: var(--card-bg);
+            padding: 5rem 3rem;
+            margin: 4rem 0;
+            border-top: 1px solid rgba(0, 217, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.2s; }
+        .stat-item:nth-child(3) { animation-delay: 0.3s; }
+        .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .guide {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .guide-container {
+            background: var(--card-bg);
+            padding: 4rem 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .guide-subtitle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .guide-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .guide-highlight {
+            background: rgba(0, 217, 255, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+
+        .guide-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin: 2.5rem 0 2rem;
+            font-weight: 600;
+        }
+
+        .guide-criteria {
+            margin-top: 2rem;
+        }
+
+        .criteria-card {
+            background: var(--dark-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .criteria-card:hover {
+            border-color: rgba(0, 217, 255, 0.5);
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
+        }
+
+        .criteria-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .criteria-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .criteria-text {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 3rem;
+            text-align: center;
+            border-top: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-100px) translateX(100px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-container {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .guide-subtitle {
+                font-size: 1.5rem;
+            }
+
+            .guide-text {
+                font-size: 1rem;
+            }
+
+            .guide-highlight {
+                font-size: 1.05rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .criteria-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <nav>
+            <div class="logo">AUTOSELECT</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="catalog.html">Каталог</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Найди свой<br>идеальный автомобиль</h1>
+            <p>Тысячи проверенных объявлений. Умный поиск по параметрам. Лучшие предложения на рынке.</p>
+            <a href="catalog.html" class="cta-button">Посмотреть каталог</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">Почему выбирают нас</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚗</div>
+                <h3>Большой выбор</h3>
+                <p>Более 5000 автомобилей всех марок и моделей. От бюджетных седанов до премиальных кроссоверов.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✓</div>
+                <h3>Проверенные продавцы</h3>
+                <p>Все объявления проходят модерацию. Работаем только с надёжными продавцами и официальными дилерами.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Быстрый поиск</h3>
+                <p>Умные фильтры помогут найти автомобиль мечты за считанные минуты по любым параметрам.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">5000+</div>
+                <div class="stat-label">Автомобилей</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Марок</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Поддержка</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Довольных клиентов</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="guide">
+        <div class="guide-container">
+            <h2 class="section-title">Памятка</h2>
+            <div class="guide-content">
+                <h3 class="guide-subtitle">Как выбрать автомобиль, который подойдёт именно вам?</h3>
+                
+                <p class="guide-text">При планировании покупки автомобиля многие оперируют лишь одним критерием: размером выделенного на эту цель бюджета. К самому объекту поиска при этом предъявляются весьма смутные требования – автомобиль нужен хороший, чтобы радовал, не ломался, был удобен и далее в том же ключе.</p>
+                
+                <p class="guide-text">Как правильно выбрать авто, чтобы не потратить слишком много времени и не совершить ошибку? Как сузить поле выбора, сформировать требования к будущей машине, и отделить действительно важные параметры от второстепенных?</p>
+                
+                <p class="guide-highlight">Самый верный способ упростить выбор – последовательно отсекать все предложения, не подходящие по конкретному параметру.</p>
+                
+                <h4 class="guide-heading">Отфильтруйте варианты по четырем критериям:</h4>
+                
+                <div class="guide-criteria">
+                    <div class="criteria-card">
+                        <div class="criteria-icon">💰</div>
+                        <h5 class="criteria-title">Бюджет</h5>
+                        <p class="criteria-text">Здесь следует разделять бюджет на покупку автомобиля и ежегодный бюджет, выделяемый на его содержание и обслуживание. От размера ежегодного бюджета выбор авто зависит не меньше, чем от денежной суммы, выделенной на саму его покупку. Определившись с двумя этими числами, можно значительно уменьшить количество моделей, пригодных к покупке.</p>
+                    </div>
+                </div>
+                <div class="guide-criteria">
+                    <div class="criteria-card">
+                        <div class="criteria-icon">💰</div>
+                        <h5 class="criteria-title">Основная задача приобретаемого автомобиля</h5>
+                        <p class="criteria-text">Надо понимать, что полной универсальности не бывает: каждая машина может быть эффективна в одних случаях и неудобна в других. Определите для себя главную задачу вашего будущего автомобиля – все остальные задачи при этому станут второстепенными.
+Кто будет проводить за рулем автомобиля большую часть времени? И что он собирается делать при помощи машины? Этот человек в первую очередь должен участвовать в выборе авто.</p>
+                    </div>
+                </div>
+                <div class="guide-criteria">
+                    <div class="criteria-card">
+                        <div class="criteria-icon">💰</div>
+                        <h5 class="criteria-title">Предполагаемый срок владения автомобилем</h5>
+                        <p class="criteria-text">Если вы знаете свой средний ежегодный пробег и планируемый срок владения автомобилем, можно отбросить множество неподходящих – или экономически невыгодных – вариантов.
+Если у вас нет данных по ежегодному пробегу, можно взять среднестатистические значения: для Москвы это 15-20 тысяч км в год. Подержанный автомобиль в среднем покупается на 2-3 года, новый – на 6 лет.
+Зная предполагаемое время владения авто и ожидаемый пробег за этот период, достаточно легко предположить, с какими техническими сложностями может быть связана эксплуатация, в какие затраты это выльется и от каких предложений точно стоит отказаться.</p>
+                    </div>
+                </div>
+                <div class="guide-criteria">
+                    <div class="criteria-card">
+                        <div class="criteria-icon">💰</div>
+                        <h5 class="criteria-title">Личные предпочтения</h5>
+                        <p class="criteria-text">Если какая-то конкретная модель вам нравится и укладывается в рамки всех предыдущих фильтров отбора – покупайте эту модель. Как ни крути, автомобиль должен приносить положительные эмоции.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 AutoSelect. Все права защищены.</p>
+    </footer>
+
+    <script>
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
